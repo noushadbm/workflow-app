@@ -1,6 +1,8 @@
 package org.rayshan.workflow.controller;
 
 import org.rayshan.workflow.entity.User;
+import org.rayshan.workflow.exception.AppException;
+import org.rayshan.workflow.modal.ApiResponse;
 import org.rayshan.workflow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,39 +19,45 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ApiResponse<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+        ApiResponse<List<User>> response = new ApiResponse<>();
+        response.setStatusCode(HttpStatus.OK.value());
+        response.setStatusText("Success");
+        response.setData(users);
+        return response;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return userService.getUserById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ApiResponse<User> getUserById(@PathVariable Long id) throws AppException {
+        User user = userService.getUserById(id);
+        ApiResponse<User> response = new ApiResponse<>(HttpStatus.OK.value(), "Success");
+        response.setData(user);
+        return response;
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
-        return userService.getUserByEmail(email)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ApiResponse<User> getUserByEmail(@PathVariable String email) throws AppException {
+        User user = userService.getUserByEmail(email);
+        ApiResponse<User> response = new ApiResponse<>(HttpStatus.OK.value(), "Success");
+        response.setData(user);
+        return response;
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ApiResponse<User> createUser(@RequestBody User user) throws AppException {
         User createdUser = userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        ApiResponse<User> response = new ApiResponse<>(HttpStatus.OK.value(), "Success");
+        response.setData(createdUser);
+        return response;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        try {
-            User updatedUser = userService.updateUser(id, user);
-            return ResponseEntity.ok(updatedUser);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ApiResponse<User> updateUser(@PathVariable Long id, @RequestBody User user) throws AppException {
+        User updatedUser = userService.updateUser(id, user);
+        ApiResponse<User> response = new ApiResponse<>(HttpStatus.OK.value(), "Success");
+        response.setData(updatedUser);
+        return response;
     }
 
     @DeleteMapping("/{id}")

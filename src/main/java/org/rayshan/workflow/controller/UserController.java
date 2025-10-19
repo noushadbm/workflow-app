@@ -1,5 +1,6 @@
 package org.rayshan.workflow.controller;
 
+import lombok.extern.log4j.Log4j2;
 import org.rayshan.workflow.entity.User;
 import org.rayshan.workflow.exception.AppException;
 import org.rayshan.workflow.modal.ApiResponse;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
+@Log4j2
 public class UserController {
 
     @Autowired
@@ -20,11 +22,11 @@ public class UserController {
 
     @GetMapping
     public ApiResponse<List<User>> getAllUsers() {
+        log.info("Fetching all users");
         List<User> users = userService.getAllUsers();
-        ApiResponse<List<User>> response = new ApiResponse<>();
-        response.setStatusCode(HttpStatus.OK.value());
-        response.setStatusText("Success");
+        ApiResponse<List<User>> response = new ApiResponse<>(HttpStatus.OK.value(), "Success");
         response.setData(users);
+        log.info("Returning {} users", users.size());
         return response;
     }
 

@@ -44,6 +44,16 @@
             <artifactId>derbytools</artifactId>
             <version>10.17.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.34</version> <!-- latest as of 2025 -->
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.derby</groupId>

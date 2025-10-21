@@ -7,10 +7,7 @@ import org.rayshan.workflow.modal.ApiResponse;
 import org.rayshan.workflow.modal.WorkflowTemplate;
 import org.rayshan.workflow.service.WorkflowService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Log4j2
 @RestController
@@ -23,12 +20,23 @@ public class WorkflowController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<WorkflowTemplate> getWorkflow(@PathVariable("id") Long workflowId) throws AppException {
-        log.info("Fetching workflow template with id: {}", workflowId);
-        WorkflowTemplate workflowTemplate = workflowService.getWorkflowTemplateById(workflowId);
+    public ApiResponse<WorkflowTemplate> getWorkflow(@PathVariable("id") Long workflowTemplateId) throws AppException {
+        log.info("Fetching workflow template with id: {}", workflowTemplateId);
+        WorkflowTemplate workflowTemplate = workflowService.getWorkflowTemplateById(workflowTemplateId);
         ApiResponse<WorkflowTemplate> response = new ApiResponse<>(HttpStatus.OK.value(), "Success");
         response.setData(workflowTemplate);
         log.info("Returning workflow template: {}", workflowTemplate);
+        return response;
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<WorkflowTemplate> updateWorkflow(@PathVariable("id") Long workflowTemplateId, @RequestBody WorkflowTemplate request) throws AppException {
+        log.info("Received workflow template update request with id: {}", workflowTemplateId);
+        request.setTemplateId(workflowTemplateId);
+        WorkflowTemplate workflowTemplate = workflowService.updateWorkflowTemplate(request);
+        ApiResponse<WorkflowTemplate> response = new ApiResponse<>(HttpStatus.OK.value(), "Success");
+        response.setData(workflowTemplate);
+        log.info("Returning updated workflow template: {}", workflowTemplate);
         return response;
     }
 }

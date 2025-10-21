@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface WorkflowLvlMapRepository extends JpaRepository<WorkflowLevelMappingEntity, WorkflowLevelMappingEntity.WorkflowLevelMappingId>  {
     List<WorkflowLevelMappingEntity> findByTemplateId(Long templateId);
+    void deleteByTemplateId(Long templateId);
 }

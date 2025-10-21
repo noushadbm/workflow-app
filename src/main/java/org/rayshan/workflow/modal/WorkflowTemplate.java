@@ -14,4 +14,5 @@ public class WorkflowTemplate {
     private LocalDateTime updatedAt;
     private String updatedBy;
     private List<WorkflowLevel> levels;
+    private List<WorkflowAction> actions;
 }
